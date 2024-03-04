@@ -1,3 +1,6 @@
 .env
 /.env
-node_modules/
+/node_modules
+node_modules
+/fantaf1/dist/node_modules
+/fantaf1/node_modules
