@@ -68,20 +68,22 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '/fantaf1/dist/fantaf1')));
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log({ email, password });
-  const query = `SELECT * FROM loginuser WHERE user_email = '${email}' AND user_pass = '${password}'`;
-  console.log({ email, password });
-  db.query(query, (error, results) => {
+  const salt = await bcrypt.genSalt();
+  let hashedPassword = await bcrypt.hash(password, salt);
+  const query = `SELECT * FROM loginuser WHERE user_email = '${email}'`;
+  db.query(query, async (error, results) => {
     if (error) {
-      res.status(500).json({ error: 'Errore durante il loginaaaaa' });
+      res.status(500).json({ error: 'Errore durante il login' });
       console.log(error)
     } else {
       if (results.length > 0) {
-        console.log("test");
-        req.session.userinfo = results[0].user_email;
-        res.status(200).json({ message: 'Login effettuato con successo' });
+        if (await bcrypt.compare(password, hashedPassword)) {
+          console.log("l'utente " + email + " ha fatto il login");
+          req.session.userinfo = results[0].user_email;
+          res.status(200).json({ message: 'Login effettuato con successo' });
+        }
       } else {
         res.status(401).json({ error: 'Credenziali non valide' });
       }
@@ -89,14 +91,14 @@ app.post('/login', (req, res) => {
   });
 });
 
-app.post('/register', (req, res) => {
+app.post('/register', encoder, (req, res) => {
   const { email, password, confirmPassword } = req.body;
   console.log({ email, password, confirmPassword });
   if (password !== confirmPassword) {
     return res.status(400).json({ error: 'La password e la conferma della password non coincidono' });
   }
   const checkQuery = `SELECT * FROM loginuser WHERE user_email = '${email}'`;
-  db.query(checkQuery, (error, results) => {
+  db.query(checkQuery, async (error, results) => {
     if (error) {
       console.error(error);
       return res.status(500).json({ error: 'Errore durante la verifica dell\'utente' });
@@ -104,7 +106,9 @@ app.post('/register', (req, res) => {
     if (results.length > 0) {
       return res.status(409).json({ error: 'Utente già registrato' });
     }
-    const insertQuery = `INSERT INTO loginuser (user_email, user_pass) VALUES ('${email}', '${password}')`;
+    const salt = await bcrypt.genSalt();
+    let hashedPassword = await bcrypt.hash(password, salt);
+    const insertQuery = `INSERT INTO loginuser (user_email, user_pass) VALUES ('${email}', '${hashedPassword}')`;
     db.query(insertQuery, (error) => {
       if (error) {
         console.error(error);
@@ -114,6 +118,13 @@ app.post('/register', (req, res) => {
       return res.status(201).json({ message: 'Registrazione effettuata con successo' });
     });
   });
+});
+
+app.post('/logout', (req, res) => {
+  res.clearCookie("userID");
+  res.status(200).json({ message: 'Logout effettuato con successo' });
+  res.end();
+  console.log("testlogout");
 });
 
 app.get('*', (req, res) => {
@@ -145,7 +156,7 @@ function creaLoginuser() {
           let hashedPassword = await bcrypt.hash(password, salt);
           console.log(hashedPassword);
           console.log(salt);
-          db.query("insert into loginuser(user_pass,user_email) values( ?, ? )", [password, email], function (error, results) {
+          db.query("insert into loginuser(user_pass,user_email) values( ?, ? )", [hashedPassword, email], function (error, results) {
             if (error) {
               console.log(error);
             } else {
