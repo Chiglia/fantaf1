@@ -1,0 +1,74 @@
+.results {
+    display: grid;
+    column-gap: 14px;
+    row-gap: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 400px));
+    justify-content: space-around;
+    padding: var(--content-padding);
+  }
+  
+  input[type="text"] {
+    border: solid 1px var(--primary-color);
+    padding: 10px;
+    border-radius: 8px;
+    margin: 30px 0px 30px 30px;
+    display: inline-block;
+    width: 30%;
+    background-color: var(--colore-cartelle);
+    color: var(--secondary-color);
+  
+  }
+  .brand-logo {
+    /* height: 40px; */
+    width: 100vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  button {
+    padding: 10px;
+    border: solid 1px var(--primary-color);
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    border-radius: 8px;
+  }
+  
+  .selettore {
+    display: flex;
+    justify-content: space-around;
+    padding: 30px 0px;
+    font-size: 18px;
+    font-weight: 800;
+    position: relative;
+    color: var(--accent-color);
+  }
+  .selettore p{
+    width:77px;
+  }
+  
+  .indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background-color: var(--accent-color);
+    transition: transform 0.3s, width 0.3s;
+  }
+  
+  
+  
+  @media (min-width: 500px) and (max-width: 768px) {
+    .results {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    input[type="text"] {
+      width: 70%;
+    }
+  }
+  
+  @media (max-width: 499px) {
+    .results {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  

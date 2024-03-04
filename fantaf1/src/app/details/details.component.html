@@ -1,0 +1,17 @@
+<article>
+    <img class="listing-photo" [src]="statsPiloti?.photo"
+      alt="Exterior photo of {{statsPiloti?.name}}"/>
+    <section class="listing-description">
+      <h2 class="listing-heading">{{statsPiloti?.name}}</h2>
+      <div class="costo"><p class="listing-location">{{ statsPiloti?.money}} </p><img src="\assets\moneta.png" class="moneta"></div>
+    </section>
+    <section class="listing-features">
+      <h2 class="section-heading">About this Driver</h2>
+      <ul>
+        <li>Locali disponibili: {{statsPiloti?.locali}}</li>
+        <li>Metri quadri: {{statsPiloti?.metri}}</li>
+        <li>Ha il WiFi: {{statsPiloti?.wifi}}</li>
+        <li>Ha una lavanderia: {{statsPiloti?.laundry}}</li>
+      </ul>
+    </section>
+  </article>

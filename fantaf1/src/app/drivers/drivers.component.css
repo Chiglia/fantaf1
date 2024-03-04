@@ -1,0 +1,74 @@
+.listing {
+    background: var(--colore-cartelle);
+    border-radius: 30px;
+    /* padding-bottom: var(--content-padding); */
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+  }
+  
+  .listing:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 5px 25px rgba(255, 255, 255, 0.2);
+  }
+  
+  .listing-heading {
+    color: var(--accent-color);
+    padding: 10px 20px 0 20px;
+    white-space: nowrap;
+    font-size: 18px;
+    text-align: center;
+  }
+  
+  .listing-photo {
+    height: 185px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 30px 30px 0 0;
+  }
+  
+  .listing-location {
+    /* padding: 10px 20px 20px 20px; */
+  }
+  
+  .listing-metri {
+    padding: 0px 0px 20px 20px;
+  }
+  
+  .listing a {
+    padding-left: var(--content-padding);
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bolder;
+    cursor: pointer;
+  }
+  
+  .listing a::after {
+    content: "\203A";
+    margin-left: 5px;
+  }
+  
+  .icona {
+    color: var(--primary-color);
+    font-size: 20px;
+  }
+  
+  .cuore {
+    position: absolute;
+    color: var(--primary-color);
+    right: 0;
+    margin-right: 20px;
+    cursor: pointer;
+  }
+  
+  .moneta {
+    height: 22px;
+  }
+  
+  .costo {
+    display: flex;
+    padding: 7px 0px;
+    align-items: center;
+    gap: 5px;
+    justify-content: center
+  }
