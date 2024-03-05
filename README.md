@@ -1,13 +1,20 @@
 # SITO FANTAFORMULA1
-it's only a side project, feel free to use code and tell suggestions
+It's only a side project, feel free to use code and tell suggestions
 
 
 ## What to do if panic:
-se si corrompe tutto
+Cosa fare se si corrompe tutto(spero di no)
 <ol>
-<li> clonare questa cartella,</li>
-<li>mettere il .env con tutte le credenziali</li>
-<li>fare `npm i` sia per la backend sia per la frontend</li>
-<li>poi fare `ng build` per la frontend</li>
-<li>infine far partire tutto con `docker-compose up -d --build` nella backend</li>
+<li>Clonare questa cartella</li>
+<li>Mettere il .env con tutte le credenziali</li>
+<li>Fare <b>npm i</b> sia per la backend sia per la frontend</li>
+<li>Fare <b>ng build</b> per la frontend</li>
+<li>Far partire tutto con <b>docker-compose up -d --build</b> nella backend</li>
 </ol>
+
+## Cosa manca:
+general powerups</br>
+descrizione sito</br>
+provare a salvare le cose comprate</br>
+fare Buy me a Coffee</br>
+fare i special thanks</br>
