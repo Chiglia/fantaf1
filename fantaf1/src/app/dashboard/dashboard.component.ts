@@ -14,20 +14,20 @@ export class DashboardComponent implements OnInit{
     constructor() {
       this.statsPilotiList = this.pilotiService.getPiloti();
     }
-    selectedTab: string = 'drivers'; // Inizialmente selezionato "Drivers"
-    indicatorPosition: string = '0'; // Posizione iniziale dell'indicatore
-    indicatorWidth: string = 'calc(100% / 2)'; // Larghezza iniziale dell'indicatore
+    selectedTab: string = 'drivers';
+    indicatorPosition: string = '0';
+    indicatorWidth: string = 'calc(100% / 2)'; 
     display = false;
     selectTab(tab: string): void {
       this.selectedTab = tab;
       if (tab === 'drivers') {
-        this.indicatorPosition = '0'; // Posizione dell'indicatore per "Drivers"
-        this.indicatorWidth = 'calc(100% / 2)'; // Larghezza dell'indicatore per "Drivers"
-        this.display = !this.display;
+        this.indicatorPosition = '0';
+        this.indicatorWidth = 'calc(100% / 2)';
+        this.display = false;
       } else if (tab === 'general') {
-        this.indicatorPosition = 'calc(100%)'; // Posizione dell'indicatore per "General"
-        this.indicatorWidth = 'calc(100% / 2)'; // Larghezza dell'indicatore per "General"
-        this.display = !this.display;
+        this.indicatorPosition = 'calc(100%)'; 
+        this.indicatorWidth = 'calc(100% / 2)';
+        this.display = true;
       }
     }
   
