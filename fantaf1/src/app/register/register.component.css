@@ -39,24 +39,24 @@ input[type="password"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
-    background-color: #444444;
+    background-color: var(--primary-color);
     border: none;
     border-radius: 5px;
-    color: #ffffff;
+    color: var(--text-color);
 }
 
 button[type="submit"] {
     width: 100%;
     padding: 10px;
-    background-color: #0066ff;
+    background-color: var(--accent-color);
     border: none;
     border-radius: 5px;
-    color: #ffffff;
+    color: var(--text-color);
     cursor: pointer;
 }
 
 button[type="submit"]:hover {
-    background-color: #0052cc;
+    background-color: var(--secondary-color);
 }
 
 .login{

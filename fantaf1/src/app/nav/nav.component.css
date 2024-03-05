@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #343a40;
+    background-color: var(--primary-color);
     position: fixed;
     width: 100%;
     z-index: 3;
@@ -34,7 +34,7 @@
     position: absolute;
     width: 100%;
     height: 3px;
-    background-color: #ffffff;
+    background-color: var(--text-color);
     transition: transform 0.3s, opacity 0.3s;
   }
   
@@ -64,7 +64,7 @@
     left: -100%;
     width: 100vw;
     height: 100vh;
-    background-color: #343a40;
+    background-color: var(--primary-color);
     z-index: 2;
     transition: left 0.3s ease;
   }
@@ -85,12 +85,12 @@
   }
   
   #sideMenu ul li a {
-    color: #ffffff;
+    color: var(--text-color);
     text-decoration: none;
   }
   
   #sideMenu ul li a:hover {
-    color: #ffffff;
+    color: var(--text-color);
   }
   
   

@@ -1,76 +1,71 @@
 .listing-photo {
-    height: 600px;
-    width: 50%;
-    object-fit: cover;
-    border-radius: 30px;
-    float: right;
-  }
-  
-  .listing-heading {
-    font-size: 48pt;
-    font-weight: bold;
-    margin-bottom: 15px;
-  }
-  .listing-features > .section-heading {
-    color: var(--secondary-color);
-    font-size: 24pt;
-    margin-bottom: 15px;
-  }
-  
-  .listing-features {
-    margin-bottom: 20px;
-  }
-  
-  .listing-features li {
-    font-size: 14pt;
-  }
-  
-  li {
-    list-style-type: none;
-  }
-  
-  .listing-apply .section-heading {
-    font-size: 18pt;
-    margin-bottom: 15px;
-  }
-  
-  label, input {
-    display: block;
-  }
-  label {
-    color: var(--secondary-color);
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 12pt;
-  }
-  /* @media (max-width: 1024px) { */
-    .listing-photo {
-      width: 100%;
-      height: 400px;
-      margin-top: 50px;
-      border-radius: 0px;
-    }
-    .listing-description{
-      margin:0px 30px 30px 30px;
-    }
-    .listing-features{
-      margin:0px 30px 30px 30px;
-    }
-    .moneta {
-      height: 22px;
-    }
-    
-    .costo {
-      display: flex;
-      padding: 7px 0px;
-      align-items: center;
-      gap: 5px;
-      justify-content: flex-end;
-      font-size: 18px;
-      font-weight: 700;
-      position: absolute;
-      top: 0;
-      margin: 470px 20px 0px 0px;
-      right: 0;
-    }
-  /* } */
+  height: 600px;
+  width: 50%;
+  object-fit: cover;
+  border-radius: 30px;
+  float: right;
+}
+
+.listing-heading {
+  font-size: 48pt;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.listing-features>.section-heading {
+  color:var(--accent-color);
+  font-size: 24pt;
+  margin-bottom: 15px;
+}
+
+.listing-features {
+  margin-bottom: 20px;
+}
+
+.listing-features li {
+  font-size: 14pt;
+}
+
+li {
+  list-style-type: none;
+}
+
+.listing-apply .section-heading {
+  font-size: 18pt;
+  margin-bottom: 15px;
+}
+
+.listing-photo {
+  width: 100%;
+  height: 400px;
+  margin-top: 50px;
+  border-radius: 0px;
+}
+
+.listing-description {
+  margin: 0px 70px 30px 30px;
+}
+
+.listing-features {
+  margin: 0px 30px 30px 30px;
+}
+
+.moneta {
+  height: 22px;
+}
+
+.costo {
+  display: flex;
+  padding: 7px 0px;
+  align-items: center;
+  gap: 5px;
+  justify-content: flex-end;
+  font-size: 18px;
+  font-weight: 700;
+  position: absolute;
+  top: 0;
+  margin: 470px 20px 0px 0px;
+  right: 0;
+}
+
+/* } */
