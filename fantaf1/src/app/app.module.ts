@@ -15,13 +15,18 @@ import { FooterComponent } from './footer/footer.component';
 import { CookieService } from 'ngx-cookie-service';
 import { DetailsComponent } from './details/details.component';
 import { RegisterComponent } from './register/register.component';
+import { CoffeeComponent } from './coffee/coffee.component';
+import { ThanksComponent } from './thanks/thanks.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'coffee', component: CoffeeComponent, title: 'Home details'},
   { path: 'details/:id', component: DetailsComponent, title: 'Home details'},
+  { path: 'thanks', component: ThanksComponent, title: 'Home details'},
+  
 ];
 
 @NgModule({

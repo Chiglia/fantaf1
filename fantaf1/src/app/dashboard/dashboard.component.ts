@@ -7,6 +7,7 @@ import { StatsPiloti } from '../stats-piloti';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
+
 export class DashboardComponent implements OnInit{
     statsPilotiList: StatsPiloti[] = [];
     pilotiService: PilotiService = inject(PilotiService);

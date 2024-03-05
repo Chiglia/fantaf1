@@ -10,8 +10,8 @@
     <div id="sideMenu" [ngStyle]="{'left': isSideMenuOpen ? '0%' : '-100%'}">
       <!-- Contenuto del menu -->
       <ul>
-        <li><a href="#">Special Thanks <i class="fa-sharp fa-solid fa-handshake"></i></a></li>
-        <li><a href="#">Buy me a coffee <i class="fa-solid fa-mug-saucer"></i></a></li>
+        <li><a [routerLink]="['/thanks']">Special Thanks <i class="fa-sharp fa-solid fa-handshake"></i></a></li>
+        <li><a [routerLink]="['/coffee']">Buy me a coffee <i class="fa-solid fa-mug-saucer"></i></a></li>
         <li><a href="https://github.com/Chiglia/fantaf1.git">GitHub <i class="fa-brands fa-github"></i></a></li>
         <li *ngIf="authService.isLoggedIn()"><a (click)="logout()">Logout <i class="fa-solid fa-right-from-bracket"></i></a></li>
       </ul>

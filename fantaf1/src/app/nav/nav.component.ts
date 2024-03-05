@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-nav',
@@ -9,7 +10,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent {
-  constructor(private cookieService: CookieService, public authService: AuthService, private router: Router) { }
+  constructor(private cookieService: CookieService, public authService: AuthService, private router: Router,private appComponent: AppComponent) { 
+    this.appComponent.routeChanged.subscribe(() => {
+      this.isSideMenuOpen = false;
+    });
+  }
   isSideMenuOpen: boolean = false;
 
   toggleSideMenu(): void {
@@ -29,4 +34,5 @@ export class NavComponent {
       }
     );
   }
+
 }
