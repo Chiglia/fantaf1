@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { General } from '../general';
 import { PilotiService } from '../piloti.service';
 import { StatsPiloti } from '../stats-piloti';
 
@@ -10,11 +11,14 @@ import { StatsPiloti } from '../stats-piloti';
 
 export class DashboardComponent implements OnInit{
     statsPilotiList: StatsPiloti[] = [];
-    pilotiService: PilotiService = inject(PilotiService);
+    generalList: General[] = [];
+    pilotiService: PilotiService = inject(PilotiService);    
   
     constructor() {
       this.statsPilotiList = this.pilotiService.getPiloti();
+      this.generalList = this.pilotiService.getGeneral();
     }
+    
     selectedTab: string = 'drivers';
     indicatorPosition: string = '0';
     indicatorWidth: string = 'calc(100% / 2)'; 

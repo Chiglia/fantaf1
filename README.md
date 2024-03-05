@@ -10,7 +10,7 @@ Cosa fare se si corrompe tutto(spero di no)
 <li>Fare <b>npm i</b> sia per la backend sia per la frontend</li>
 <li>Fare <b>ng build</b> per la frontend</li>
 <li>Far partire tutto con <b>docker-compose up -d --build</b> nella backend</li>
-<li>per modificare la frontend fare <b>npm run watch</b> così capisce i cambiamenti</li>
+<li>Per modificare la frontend fare <b>npm run watch</b> così capisce i cambiamenti</li>
 </ol>
 
 ## Cosa manca:
@@ -19,3 +19,4 @@ descrizione sito</br>
 provare a salvare le cose comprate</br>
 fare Buy me a Coffee</br>
 fare i special thanks</br>
+login with Google</br>

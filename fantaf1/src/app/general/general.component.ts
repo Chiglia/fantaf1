@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { General } from '../general';
 
 @Component({
   selector: 'app-general',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./general.component.css']
 })
 export class GeneralComponent {
-
+  @Input() general!: General;
 }

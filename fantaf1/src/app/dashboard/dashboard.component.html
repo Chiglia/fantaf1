@@ -3,7 +3,8 @@
 </a>
 <div class="selettore">
   <p (click)="selectTab('drivers')" [class.selected]="selectedTab === 'drivers'">Drivers</p>
-  <span class="indicator" [style.transform]="'translateX(' + indicatorPosition + ')'" [style.width]="indicatorWidth"></span>
+  <span class="indicator" [style.transform]="'translateX(' + indicatorPosition + ')'"
+    [style.width]="indicatorWidth"></span>
   <p (click)="selectTab('general')" [class.selected]="selectedTab === 'general'">General</p>
 </div>
 
@@ -12,5 +13,5 @@
   </app-drivers>
 </section>
 <div id="comp-render" *ngIf="display">
-  <app-general></app-general>
+  <app-general *ngFor="let general of generalList" [general]="general"></app-general>
 </div>

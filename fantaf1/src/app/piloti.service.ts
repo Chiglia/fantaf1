@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StatsPiloti } from './stats-piloti';
-
+import { General } from './general';
 
 
 @Injectable({
@@ -238,6 +238,42 @@ export class PilotiService {
   }
 
   getPilotaById(id: number): StatsPiloti | undefined {
-    return this.StatsPilotiList.find(housingLocation => housingLocation.id === id);
+    return this.StatsPilotiList.find(StatsPiloti => StatsPiloti.id === id);
+  }
+
+  GeneralList: General[] = [
+    {
+      id: 20,
+      name: '3 Yellow Flag in una gara',
+      money: 15
+    },
+    {
+      id: 21,
+      name: 'Per ogni Red Flag',
+      money: 15
+    },
+    {
+      id: 22,
+      name: 'Redbull uno due',
+      money: 15
+    },
+    {
+      id: 23,
+      name: 'Per ogni problema nei pit',
+      money: 15
+    },
+    {
+      id: 24,
+      name: 'Logan Sargeant',
+      money: 15
+    }
+
+  ];
+  getGeneral(): General[] {
+    return this.GeneralList;
+  }
+
+  getGeneralById(id: number): General | undefined {
+    return this.GeneralList.find(General => General.id === id);
   }
 }
