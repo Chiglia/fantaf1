@@ -1,53 +1,37 @@
-.listing-photo {
-  height: 600px;
-  width: 50%;
-  object-fit: cover;
-  border-radius: 30px;
-  float: right;
-}
-
-.listing-heading {
-  font-size: 48pt;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.listing-features>.section-heading {
-  color:var(--accent-color);
-  font-size: 24pt;
-  margin-bottom: 15px;
-}
-
-.listing-features {
-  margin-bottom: 20px;
-}
-
-.listing-features li {
-  font-size: 14pt;
-}
-
-li {
-  list-style-type: none;
-}
-
-.listing-apply .section-heading {
-  font-size: 18pt;
-  margin-bottom: 15px;
-}
-
-.listing-photo {
+.immagine {
   width: 100%;
+  object-fit: cover;
   height: 400px;
   margin-top: 50px;
   border-radius: 0px;
 }
 
-.listing-description {
-  margin: 0px 70px 30px 30px;
+.nome {
+  font-size: 2.8em;
+  font-weight: bold;
+  margin-bottom: 15px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-.listing-features {
-  margin: 0px 30px 30px 30px;
+.titolo {
+  color: var(--accent-color);
+  font-size: 24pt;
+}
+
+.content {
+  margin: var(--content-padding);
+  position: relative;
+}
+
+.flex-conteiner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li {
+  list-style-type: none;
 }
 
 .moneta {
@@ -56,16 +40,24 @@ li {
 
 .costo {
   display: flex;
-  padding: 7px 0px;
   align-items: center;
   gap: 5px;
   justify-content: flex-end;
   font-size: 18px;
   font-weight: 700;
-  position: absolute;
-  top: 0;
-  margin: 470px 20px 0px 0px;
-  right: 0;
 }
 
-/* } */
+.powerup {
+  margin: var(--content-padding) 0px;
+  background-color: var(--secondary-color);
+  padding: 12px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 15px var(--secondary-color);
+  transition: transform 0.3s, box-shadow 0.3s;
+  font-size: 24px;
+}
+
+.powerup:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 5px 25px var(--secondary-color);
+}
