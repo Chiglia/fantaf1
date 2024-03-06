@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -13,12 +14,13 @@ export class LoginComponent {
     password: ''
   };
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private cookieService: CookieService) {}
 
   onSubmit() {
     this.authService.login(this.formData)
       .subscribe(
-        () => {
+        (response) => {
+          this.cookieService.set('userID', response.token);
           this.router.navigate(['/dashboard']);
         },
         error => {
