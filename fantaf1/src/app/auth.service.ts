@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
-import { Router } from '@angular/router';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
@@ -11,7 +9,7 @@ import { catchError, map } from 'rxjs/operators';
 export class AuthService {
   private apiUrl = 'https://fantaf1.chiglia.ovh';
 
-  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) { }
+  constructor(private http: HttpClient) { }
 
   login(credentials: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials);
@@ -19,7 +17,7 @@ export class AuthService {
 
   isLoggedIn(): Observable<boolean> {
     return this.http.get<{ isLoggedIn: boolean }>('/api/isLoggedIn').pipe(
-      map(response => !!response.isLoggedIn), // Converte il valore in booleano
+      map(response => !!response.isLoggedIn),
       catchError(() => {
         return of(false);
       })

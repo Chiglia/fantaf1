@@ -5,7 +5,8 @@ const port = process.env.ENV_PORT || 3000;
 const path = require('path');
 const cors = require("cors");
 var flush = require('connect-flash');
-const http = require("http");
+const https = require('https');
+const fs = require('fs');
 var crypto = require('crypto');
 var bcrypt = require('bcrypt');
 const mysql = require('mysql2');
@@ -23,6 +24,8 @@ const mysqlConfig = {
   database: process.env.MYSQL_DATABASE,
   port: process.env.MYSQL_TCP_PORT
 }
+
+
 
 let db = mysql.createConnection(mysqlConfig);
 
@@ -54,7 +57,8 @@ const biscotto = session({
   store: sessionStore,
   cookie: {
     maxAge: 34560000,
-    httpOnly: true
+    httpOnly: true,
+    secure: true
   },
   resave: false,
   saveUninitialized: false,
@@ -90,10 +94,8 @@ app.get('/api/user', (req, res) => {
 
 app.get('/api/isLoggedIn', (req, res) => {
   if (req.session.userinfo) {
-    console.log("sono qui");
     res.status(200).json({ isLoggedIn: true });
   } else {
-    console.log("non sono qui");
     res.status(401).json({ isLoggedIn: false });
   }
 });
@@ -204,9 +206,12 @@ function creaLoginuser() {
     }
   });
 }
+const privateKey = fs.readFileSync('key.pem', 'utf8');
+const certificate = fs.readFileSync('certificato.pem', 'utf8');
 
-const server = http.createServer(app);
-server.listen(port, (err) => {
+const credentials = { key: privateKey, cert: certificate };
+const httpsServer = https.createServer(credentials, app);
+httpsServer.listen(port, (err) => {
   if (err) {
     return console.error(err);
   }
