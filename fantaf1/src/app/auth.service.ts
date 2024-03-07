@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
-import { User } from './user';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +16,16 @@ export class AuthService {
   login(credentials: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials);
   }
-  isLoggedIn(): boolean {
-    return this.cookieService.check('userID');
+
+  isLoggedIn(): Observable<boolean> {
+    return this.http.get<{ isLoggedIn: boolean }>('/api/isLoggedIn').pipe(
+      map(response => !!response.isLoggedIn), // Converte il valore in booleano
+      catchError(() => {
+        return of(false);
+      })
+    );
   }
+
   register(credentials: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, credentials);
   }
@@ -26,22 +33,7 @@ export class AuthService {
   logout(): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/logout`, {});
   }
-
-  getUserProfile() {
-    const token = this.cookieService.get('userID');
-    const headers = new HttpHeaders().set('Authorization', `${token}`);
-    const userData = this.http.get<any>(`${this.apiUrl}/api/user`, { headers });
-    userData.subscribe(
-      userData => {
-        // Stampa l'ID e l'email dell'utente
-        console.log('ID:', userData.id);
-        console.log('Email:', userData.user_email);
-      },
-      error => {
-        // Gestisci gli errori, se necessario
-        console.error('Errore durante il recupero dei dati dell\'utente:', error);
-      }
-    );
-    return userData;
+  getEmail(): Observable<string> {
+    return this.http.get<string>('/api/user');
   }
 }

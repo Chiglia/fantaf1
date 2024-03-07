@@ -1,15 +1,18 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-const port = process.env.ENV_PORT;
+const port = process.env.ENV_PORT || 3000;
 const path = require('path');
 const cors = require("cors");
+var flush = require('connect-flash');
 const http = require("http");
 var crypto = require('crypto');
 var bcrypt = require('bcrypt');
 const mysql = require('mysql2');
+var session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
+var createError = require('http-errors');
 var encoder = express.urlencoded({ extended: true });
-const jwt = require('jsonwebtoken');
 
 app.use(cors());
 
@@ -32,78 +35,90 @@ db.connect((error) => {
   creaLoginuser();
 });
 
+global.sessionStore = new MySQLStore({
+  expiration: 34560000,
+  createDatabaseTable: true,
+  schema: {
+    tableName: process.env.ENV_TABLE,
+    columnNames: {
+      session_id: process.env.ENV_SESSION,
+      expires: process.env.ENV_EXPIRES,
+      data: process.env.ENV_DATA
+    }
+  }
+}, db);
+
+const biscotto = session({
+  key: process.env.ENV_KEY,
+  secret: process.env.ENV_SECRET,
+  store: sessionStore,
+  cookie: {
+    maxAge: 34560000,
+    httpOnly: true
+  },
+  resave: false,
+  saveUninitialized: false,
+  path: '/',
+
+});
+
+app.use(biscotto);
+
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '/fantaf1/dist/fantaf1')));
 
-function verifyToken(req, res, next) {
-  const token = req.headers.authorization;
-  if (!token) {
-    return res.status(403).json({ error: 'Token non fornito' });
+app.get('/api/user', (req, res) => {
+  if (!req.session.userinfo) {
+    return res.status(401).json({ error: 'Utente non autenticato' });
   }
-  jwt.verify(token, 'your_secret_key', (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ error: 'Token non valido' });
+  const email = req.session.userinfo;
+  const query = `SELECT user_email,monete,compere FROM loginuser WHERE user_email = '${email}'`;
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error('Errore durante il recupero dei dati dell\'utente:', error);
+      return res.status(500).json({ error: 'Errore durante il recupero dei dati dell\'utente' });
     }
-    req.user = decoded;
-    next();
+    if (results.length > 0) {
+      const userData = results[0];
+      res.json(userData);
+    } else {
+      res.status(404).json({ error: 'Utente non trovato' });
+    }
   });
-}
+});
 
-app.get('/api/user', verifyToken, async (req, res) => {
-  try {
-    const email = req.user.email;
-    const query = `SELECT id,user_email FROM loginuser WHERE user_email = '${email}'`;
-    db.query(query, (error, results) => {
-      if (error) {
-        console.error('Errore durante il recupero dei dati dell\'utente:', error);
-        return res.status(500).json({ error: 'Errore durante il recupero dei dati dell\'utente' });
-      }
-
-      if (results.length > 0) {
-        const userData = results[0];
-        console.log(userData);
-        res.json(userData);
-      } else {
-        res.status(404).json({ error: 'Utente non trovato' });
-      }
-    });
-  } catch (error) {
-    console.error('Errore durante il recupero dei dati dell\'utente:', error);
-    res.status(500).json({ error: 'Errore durante il recupero dei dati dell\'utente' });
+app.get('/api/isLoggedIn', (req, res) => {
+  if (req.session.userinfo) {
+    console.log("sono qui");
+    res.status(200).json({ isLoggedIn: true });
+  } else {
+    console.log("non sono qui");
+    res.status(401).json({ isLoggedIn: false });
   }
 });
 
-
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-
-  // Recupera la password hashata dal database
   const query = `SELECT * FROM loginuser WHERE user_email = '${email}'`;
   db.query(query, async (error, results) => {
     if (error) {
-      console.error('Errore durante il login:', error);
-      return res.status(500).json({ error: 'Errore durante il login' });
+      res.status(500).json({ error: 'Errore durante il login' });
+      console.log(error)
     }
-
     if (results.length === 0) {
       return res.status(401).json({ error: 'Credenziali non valide' });
     }
-
-    const hashedPassword = results[0].user_pass; // Password hashata recuperata dal database
+    const hashedPassword = results[0].user_pass;
 
     const passwordMatch = await bcrypt.compare(password, hashedPassword);
     if (!passwordMatch) {
       return res.status(401).json({ error: 'Credenziali non valide' });
     }
-    const userId = results[0].id;
-    const token = jwt.sign({ userId, email }, 'your_secret_key', { expiresIn: '1h' });
-
-    console.log("L'utente " + email + " ha effettuato il login con successo");
-    res.status(200).json({ message: 'Login effettuato con successo', token });
+    req.session.userinfo = results[0].user_email;
+    res.status(200).json({ message: 'Login effettuato con successo' });
   });
 });
-
 
 app.post('/register', encoder, (req, res) => {
   const { email, password, confirmPassword } = req.body;
@@ -128,6 +143,7 @@ app.post('/register', encoder, (req, res) => {
         console.error(error);
         return res.status(500).json({ error: 'Errore durante l\'inserimento dell\'utente nel database' });
       }
+      req.session.userinfo = email;
       return res.status(201).json({ message: 'Registrazione effettuata con successo' });
     });
   });
@@ -153,9 +169,12 @@ function creaLoginuser() {
         const createTableQuery = `
         CREATE TABLE loginuser (
           id INT AUTO_INCREMENT PRIMARY KEY,
-          user_email VARCHAR(255),
-          user_pass VARCHAR(255)
-        )`;
+          user_email VARCHAR(255) NOT NULL,
+          user_pass VARCHAR(255) NOT NULL,
+          monete INT NOT NULL DEFAULT 100,
+          compere VARCHAR(255) 
+        )
+      `;
         db.query(createTableQuery, async (err, result) => {
           if (err) {
             console.error('Errore durante la creazione della tabella loginuser:', err);

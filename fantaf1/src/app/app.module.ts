@@ -26,6 +26,7 @@ const routes: Routes = [
   { path: 'coffee', component: CoffeeComponent, title: 'Home details'},
   { path: 'details/:id', component: DetailsComponent, title: 'Home details'},
   { path: 'thanks', component: ThanksComponent, title: 'Home details'},
+  { path: '**', redirectTo: '/dashboard' },
   
 ];
 

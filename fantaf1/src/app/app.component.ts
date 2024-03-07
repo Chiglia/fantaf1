@@ -10,17 +10,14 @@ import { AuthService } from './auth.service';
 export class AppComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
   @Output() routeChanged: EventEmitter<void> = new EventEmitter<void>();
-  ngOnInit() {
-    // Esegui il reindirizzamento alla dashboard se l'utente è già autenticato
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/dashboard']);
-    }
+  async ngOnInit() {
+    // if (await this.authService.isLoggedIn()) {
+    //   this.router.navigate(['/dashboard']);
+    // }
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.routeChanged.emit();
       }
     });
   }
-
-
 }
