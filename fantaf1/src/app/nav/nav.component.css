@@ -92,5 +92,25 @@
   #sideMenu ul li a:hover {
     color: var(--text-color);
   }
-  
-  
+  .moneteTesto{
+    display:flex;
+    align-items: center;
+    gap:5px;
+    font-size: 18px;
+    font-weight: 700;
+    align-items: center;
+  }
+  .moneteTesto li{
+    padding:0 !important;
+
+  }
+  .moneta {
+    height: 22px;
+  }
+
+  .flessione{
+    display:flex;
+  }
+  .nome{
+    font-size: 20px;
+  }

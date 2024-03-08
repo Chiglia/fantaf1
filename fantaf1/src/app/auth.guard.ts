@@ -13,13 +13,12 @@ export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): Observable<boolean> | boolean {
-    return this.authService.isLoggedIn().pipe(
-      tap((isLoggedIn: boolean) => {
-        if (!isLoggedIn) {
-          this.router.navigate(['/login']);
-        }
-      })
-    );
+    if (this.authService.isLoggedIn()) {
+      return true; // Se l'utente è loggato, consente l'accesso alla rotta
+    } else {
+      this.router.navigate(['/login']); // Se l'utente non è loggato, reindirizza alla pagina di login
+      return false;
+    }
   }
 }
 

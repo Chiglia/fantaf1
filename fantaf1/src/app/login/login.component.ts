@@ -14,11 +14,14 @@ export class LoginComponent {
   };
 
   constructor(private authService: AuthService, private router: Router) {}
-
+  
   onSubmit() {
     this.authService.login(this.formData)
       .subscribe(
         () => {
+          this.authService.checkLoggedInStatus();
+          console.log("test");
+
           this.router.navigate(['/dashboard']);
         },
         error => {
@@ -26,4 +29,5 @@ export class LoginComponent {
         }
       );
   }
+  
 }

@@ -72,12 +72,9 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '/fantaf1/dist/fantaf1')));
 
-app.get('/api/user', (req, res) => {
-  if (!req.session.userinfo) {
-    return res.status(401).json({ error: 'Utente non autenticato' });
-  }
+app.get('/api/user', verificaAutenticazione, (req, res) => {
   const email = req.session.userinfo;
-  const query = `SELECT user_email,monete,compere FROM loginuser WHERE user_email = '${email}'`;
+  const query = `SELECT user_email, monete, compere FROM loginuser WHERE user_email = '${email}'`;
   db.query(query, (error, results) => {
     if (error) {
       console.error('Errore durante il recupero dei dati dell\'utente:', error);
@@ -94,11 +91,38 @@ app.get('/api/user', (req, res) => {
 
 app.get('/api/isLoggedIn', (req, res) => {
   if (req.session.userinfo) {
+    console.log(req.session.userinfo + " fa il check del login");
     res.status(200).json({ isLoggedIn: true });
   } else {
     res.status(401).json({ isLoggedIn: false });
   }
 });
+
+app.post('/aggiungi-pilota-compere', verificaAutenticazione, (req, res) => {
+  const pilotaId = req.body.pilotaId;
+  const pilotaCosto = req.body.pilotaCosto;
+  console.log(pilotaCosto);
+  db.query(`SELECT * FROM loginuser WHERE user_email = '${req.session.userinfo}'`, (error, results) => {
+    if (error) {
+      console.error('Errore durante la ricerca dell\'utente:', error);
+      return res.status(500).json({ error: 'Errore interno del server' });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Utente non trovato' });
+    }
+    const query = `UPDATE loginuser SET compere = CONCAT(compere, ',', ?), monete = monete - ?  WHERE user_email = ?`;
+    db.query(query, [pilotaId, pilotaCosto, req.session.userinfo], (error, results) => {
+      if (error) {
+        console.error('Errore durante l\'aggiunta del pilota alla sezione compere:', error);
+        return res.status(500).json({ error: 'Errore interno del server' });
+      }
+      console.log("aggiunto il pilota " + pilotaId + " all'account: " + req.session.userinfo);
+      return res.status(200).json({ message: 'Pilota aggiunto con successo alla sezione compere' });
+    });
+  });
+});
+
+
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -118,6 +142,7 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Credenziali non valide' });
     }
     req.session.userinfo = results[0].user_email;
+    console.log(results[0].user_email + " ha fatto il login")
     res.status(200).json({ message: 'Login effettuato con successo' });
   });
 });
@@ -150,12 +175,19 @@ app.post('/register', encoder, (req, res) => {
     });
   });
 });
-
-app.post('/logout', (req, res) => {
+function verificaAutenticazione(req, res, next) {
+  if (req.session.userinfo) {
+    next();
+  } else {
+    res.status(401).json({ error: 'Utente non autenticato' });
+  }
+}
+app.post('/logout', verificaAutenticazione, (req, res) => {
+  console.log(req.session.userinfo + " ha fatto il logout");
   res.clearCookie("userID");
   res.status(200).json({ message: 'Logout effettuato con successo' });
   res.end();
-  console.log("testlogout");
+
 });
 
 app.get('*', (req, res) => {
@@ -174,7 +206,7 @@ function creaLoginuser() {
           user_email VARCHAR(255) NOT NULL,
           user_pass VARCHAR(255) NOT NULL,
           monete INT NOT NULL DEFAULT 100,
-          compere VARCHAR(255) 
+          compere VARCHAR(255) NOT NULL DEFAULT ''
         )
       `;
         db.query(createTableQuery, async (err, result) => {
