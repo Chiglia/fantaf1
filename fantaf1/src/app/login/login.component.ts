@@ -19,15 +19,12 @@ export class LoginComponent {
     this.authService.login(this.formData)
       .subscribe(
         () => {
-          this.authService.checkLoggedInStatus();
-          console.log("test");
-
+          console.log('Login effettuato con successo');
           this.router.navigate(['/dashboard']);
         },
         error => {
-          console.error('Login error:', error);
+          console.error('Errore durante il login:', error);
         }
       );
   }
-  
 }

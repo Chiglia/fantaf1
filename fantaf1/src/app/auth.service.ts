@@ -12,29 +12,27 @@ import { UserData } from './user-data';
 export class AuthService {
   private apiUrl = 'https://fantaf1.chiglia.ovh';
   private userData: UserData | null = null;
-  private isLoggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private http: HttpClient) { this.checkLoggedInStatus(); }
-
-
+  constructor(private http: HttpClient) { }
 
   login(credentials: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, credentials);
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+      tap(response => {
+        console.log(response.userData);
+        if (response && response.userData) {
+          this.userData = response.userData;
+          localStorage.setItem('userData', JSON.stringify(this.userData));
+        }
+      })
+    );
   }
-
-  public checkLoggedInStatus(): void {
-    this.http.get<{ isLoggedIn: boolean }>('/api/isLoggedIn').subscribe(response => {
-      this.isLoggedInSubject.next(response.isLoggedIn);
-    });
-  }
-
   isLoggedIn(): Observable<boolean> {
-    const isLoggedIn = this.isLoggedInSubject.getValue();
-    if (isLoggedIn) {
-      return of(true);
-    }
-    this.checkLoggedInStatus();
-    return this.isLoggedInSubject.asObservable();
+    return this.http.get<{ isLoggedIn: boolean }>('/api/isLoggedIn').pipe(
+      map(response => !!response.isLoggedIn),
+      catchError(() => {
+        return of(false);
+      })
+    );
   }
 
   register(credentials: any): Observable<any> {
@@ -42,23 +40,10 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
+    localStorage.clear();
     return this.http.post<any>(`${this.apiUrl}/logout`, {});
   }
 
-  getuserData(): Observable<UserData> {
-    if (this.userData) {
-      return of(this.userData);
-    }
-    return this.http.get<UserData>('/api/user').pipe(
-      tap(userData => {
-        this.userData = userData;
-      }),
-      catchError(error => {
-        console.error('Errore durante il recupero dei dati dell\'utente:', error);
-        return of({ user_email: '', monete: 0, compere: '' });
-      })
-    );
-  }
   aggiungiPilotaCompere(pilotaId: number, pilotaCosto: number): Observable<any> {
     const user_email = this.userData?.user_email;
     if (!user_email) {

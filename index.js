@@ -142,8 +142,13 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Credenziali non valide' });
     }
     req.session.userinfo = results[0].user_email;
+    const userData = {
+      user_email: results[0].user_email,
+      monete: results[0].monete,
+      compere: results[0].compere
+    };
+    res.json({ userData: userData });
     console.log(results[0].user_email + " ha fatto il login")
-    res.status(200).json({ message: 'Login effettuato con successo' });
   });
 });
 

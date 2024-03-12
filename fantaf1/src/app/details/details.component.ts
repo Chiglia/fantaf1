@@ -22,9 +22,11 @@ export class DetailsComponent {
   }
 
   scegliPilota(pilotaId: number, pilotaCosto: number): void {
-    this.authService.getuserData().subscribe(userData => {
+    const userDataJSON = localStorage.getItem('userData');
+    if (userDataJSON) {
+      const userData = JSON.parse(userDataJSON);
       if (userData && userData.monete >= pilotaCosto) {
-        this.authService.aggiungiPilotaCompere(pilotaId,pilotaCosto).subscribe(
+        this.authService.aggiungiPilotaCompere(pilotaId, pilotaCosto).subscribe(
           () => {
             console.log('Pilota aggiunto con successo alla sezione compere.');
           },
@@ -35,6 +37,8 @@ export class DetailsComponent {
       } else {
         console.log('Non hai abbastanza monete per scegliere questo pilota.');
       }
-    });
+    } else {
+      console.log('Nessun dato dell\'utente trovato nel localStorage.');
+    }
   }
 }

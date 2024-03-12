@@ -32,7 +32,7 @@ export class NavComponent implements OnInit {
         console.log('Logout effettuato con successo');
         this.router.navigate(['/login']);
         this.isSideMenuOpen = !this.isSideMenuOpen;
-        this.isLoggedIn = false; // Impostiamo isLoggedIn su false dopo il logout
+        this.isLoggedIn = false;
       },
       error => {
         console.error('Errore durante il logout:', error);
@@ -42,15 +42,15 @@ export class NavComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.isLoggedIn().subscribe((loggedIn: boolean) => {
-      if (loggedIn) {
-        this.authService.getuserData().subscribe(userData => {
-          this.userData = userData;          
-        });
-      }
-    });
-    this.authService.checkLoggedInStatus(); // Chiamiamo checkLoggedInStatus() solo all'inizio
-    this.authService.isLoggedIn().subscribe((loggedIn: boolean) => {
       this.isLoggedIn = loggedIn;
+      
+      if (loggedIn) {
+        const userDataJSON = localStorage.getItem('userData');
+        if (userDataJSON) {
+          this.userData = JSON.parse(userDataJSON);
+        }
+      }
     });
   }
 }
+

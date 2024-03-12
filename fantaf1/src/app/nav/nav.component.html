@@ -10,8 +10,8 @@
     <ul>
       <div class="flessione">
         <li *ngIf="isLoggedIn" class="nome">{{ userData?.user_email }}</li>
-        <div class="moneteTesto">
-          <li *ngIf="isLoggedIn">{{ userData?.monete }}</li>
+        <div class="moneteTesto"*ngIf="isLoggedIn">
+          <li >{{ userData?.monete }}</li>
           <img src="\assets\moneta.png" class="moneta">
 
         </div>
