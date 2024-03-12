@@ -117,7 +117,17 @@ app.post('/aggiungi-pilota-compere', verificaAutenticazione, (req, res) => {
         return res.status(500).json({ error: 'Errore interno del server' });
       }
       console.log("aggiunto il pilota " + pilotaId + " all'account: " + req.session.userinfo);
-      return res.status(200).json({ message: 'Pilota aggiunto con successo alla sezione compere' });
+      db.query(`SELECT user_email,compere,monete FROM loginuser WHERE user_email = '${req.session.userinfo}'`, (error, results) => {
+        if (error) {
+          console.error('Errore durante la ricerca dell\'utente:', error);
+          return res.status(500).json({ error: 'Errore interno del server' });
+        }
+        if (results.length === 0) {
+          return res.status(404).json({ error: 'Utente non trovato' });
+        }
+        const userData = results[0];
+        return res.status(200).json({ message: 'Pilota aggiunto con successo alla sezione compere', userData });
+      });
     });
   });
 });

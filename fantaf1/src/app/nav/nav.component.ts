@@ -4,6 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
 import { UserData } from '../user-data';
+import { UserDataUpdateService } from '../userdataupdate.service';
 
 @Component({
   selector: 'app-nav',
@@ -11,13 +12,13 @@ import { UserData } from '../user-data';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  constructor(private cookieService: CookieService, public authService: AuthService, private router: Router, private appComponent: AppComponent) {
+  constructor(private cookieService: CookieService, public authService: AuthService, private router: Router, private appComponent: AppComponent, private userDataUpdateService: UserDataUpdateService) {
     this.appComponent.routeChanged.subscribe(() => {
       this.isSideMenuOpen = false;
     });
   }
   isSideMenuOpen: boolean = false;
-  userData: UserData | undefined;
+  userData: UserData | null = null;
   @Input() isLoggedIn: boolean = false;
 
   toggleSideMenu(): void {
@@ -42,14 +43,12 @@ export class NavComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.isLoggedIn().subscribe((loggedIn: boolean) => {
-      this.isLoggedIn = loggedIn;
-      
       if (loggedIn) {
-        const userDataJSON = localStorage.getItem('userData');
-        if (userDataJSON) {
-          this.userData = JSON.parse(userDataJSON);
-        }
+        this.userDataUpdateService.getUpdatedUserData().subscribe(userData => {
+          this.userData = userData;
+        });
       }
+      this.isLoggedIn = loggedIn;
     });
   }
 }
