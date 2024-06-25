@@ -1,0 +1,1 @@
+{"ast":null,"code":"export function jsonCopy(obj) {\n  return JSON.parse(JSON.stringify(obj));\n}\nexport function parseJwt(token) {\n  const base64Url = token.split(\".\")[1];\n  const base64 = base64Url.replace(\"-\", \"+\").replace(\"_\", \"/\");\n  return JSON.parse(atob(base64));\n}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
